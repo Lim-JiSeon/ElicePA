@@ -41,6 +41,133 @@
 - 오름차순으로 정렬한 뒤 join 함수를 사용해 &로 string 화 시켜 Router.push 했습니다.
 - 이때 next의 next dynamic route를 이용했으며, query 값이 없을 경우도 고려해 [[...query]]를 사용했습니다.(Optional Catch-all Segments)
 
+## 못한 부분
+
+- pagination
+
+  - 시간 안에 구현을 못해 제가 한 이전 프로젝트 중 작업한 pagination 코드 부분을 첨부합니다.
+  - 마감일이 끝난 이후에도 작업을 계속해 완성할 수 있도록 하겠습니다.
+  - 졸업 프로젝트로 작년 1학기 때 진행했으며, 기본적으로 1~10 까지의 페이지가 있으며, 1일때 왼쪽 화살표를 클릭할 경우 페이지가 이동되지 않도록 설정했습니다.(오른쪽도 마찬가지)
+  - react와 js, styled-components를 사용했습니다.
+  - [프로젝트 pagination 코드 링크](https://github.com/HUFS-Capstone-23-01/TravelFeelDog-Web/blob/main/src/containers/Community.jsx)
+
+  ```js
+  // pagination 로직 부분
+
+  const changePage = (count) => {
+    if (page % 10 == 0) {
+      pageClick[9] = false;
+    } else {
+      pageClick[(page % 10) - 1] = false;
+    }
+    if (count % 10 == 0) {
+      pageClick[9] = true;
+    } else {
+      pageClick[(count % 10) - 1] = true;
+    }
+    console.log("count = ", count);
+    page[0] = count;
+    setPage([...page]);
+    setPageClick([...pageClick]);
+    console.log("page = ", page);
+    searchTag();
+  };
+
+  const nextPage = (direction) => {
+    if (direction == "right") {
+      for (let i = 0; i < 10; i++) {
+        pageNumbers[i] += 10;
+      }
+      setPageNumbers([...pageNumbers]);
+    } else {
+      if (pageNumbers[0] - 10 <= 0) {
+        setPageNumbers([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      } else {
+        for (let i = 0; i < 10; i++) {
+          pageNumbers[i] -= 10;
+        }
+        setPageNumbers([...pageNumbers]);
+      }
+    }
+    page[0] = pageNumbers[0];
+    setPage([...page]);
+    searchTag();
+  };
+  ```
+
+  ```js
+  // pagination css 부분
+
+  const Style = {
+  PageList: styled.div`
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 3vh 0;
+  `,
+  PageNum: styled.div`
+   display: flex;
+   flex-direction: row;
+  `,
+  Num: styled.div`
+   padding: 0 1vw;
+  `,
+  NextBtn: styled.button`
+   border: none;
+   background-color: transparent;
+   &:hover{
+     color: #81E768;
+   }
+   ${({isselected}) =>
+     isselected ?`
+       color: #81E768;
+       font-weight: bold;
+     `
+     :`
+       color: #000000;
+     `
+   }
+  `
+  };,
+
+  <Style.PageList>
+       <Style.NextBtn onClick={() => nextPage("left")}><FontAwesomeIcon icon={faChevronLeft} color="#94E0AC" size="2x" /></Style.NextBtn>
+         <Style.PageNum>
+           {pageNumbers.map(number => {
+             return (
+               <Style.NextBtn key={number} isselected={number == page? 1: 0} onClick={() => changePage(number)}><Style.Num>{number}</Style.Num></Style.NextBtn>
+             )})
+           }
+         </Style.PageNum>
+         <Style.NextBtn onClick={() => nextPage("right")}><FontAwesomeIcon icon={faChevronRight} color="#94E0AC" size="2x" /></Style.NextBtn>
+       </Style.PageList>
+  ```
+
+- api 연결
+
+  - 시간 안에 구현을 못해 제가 한 이전 프로젝트 중 작업한 api 연결 작업 코드 부분을 첨부합니다.
+  - 마감일이 끝난 이후에도 작업을 계속해 완성할 수 있도록 하겠습니다.
+  - 부트캠프 중 진행한 프로젝트로 작년 하반기 때 진행했습니다.
+  - next 환경에서 scss를 사용했습니다.
+  - [프로젝트 링크](https://github.com/Lim-JiSeon/FEDC4_Price-PCC_DONGYOUNG)
+  - [프로젝트 api 연결 작업 코드 링크](https://github.com/Lim-JiSeon/FEDC4_Price-PCC_DONGYOUNG/blob/main/src/services/search/index.ts)
+
+```ts
+// 검색어를 통해 filtering 된 게시물을 가져오는 작업 코드
+
+import { apiClient } from "@/lib/axios";
+
+export const getSearchData = async (keyword: string) => {
+  try {
+    const { data } = await apiClient.get(`/api/search/all/${keyword}`);
+    return data;
+  } catch (e) {
+    if (e instanceof Error) throw new Error(e.message);
+  }
+};
+```
+
 ## 배포 링크
 
 https://elice-pa-ten.vercel.app/
