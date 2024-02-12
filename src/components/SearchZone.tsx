@@ -10,10 +10,11 @@ export const SearchZone = () => {
 
       <style jsx>{`
         .search-zone-container {
-          max-width: 1280px;
+          width: 100%;
           display: flex;
           flex-direction: column;
           justify-content: center;
+          margin-bottom: 16px;
         }
       `}</style>
     </div>
