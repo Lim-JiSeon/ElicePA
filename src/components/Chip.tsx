@@ -1,4 +1,6 @@
+import { filterQuery } from "@/constants/filterQuery";
 import SessionStorage from "@/utils/SessionStorage";
+import Router from "next/router";
 import React, { useEffect, useState } from "react";
 
 type ChipProps = {
@@ -8,17 +10,28 @@ type ChipProps = {
 
 export const Chip = ({ text, name }: ChipProps) => {
   const [checked, setChecked] = useState(false);
+  const array = SessionStorage.getItem("chip-value") ?? [];
 
   const handleClick = () => {
     setChecked(!checked);
-
-    const array = SessionStorage.getItem("chip-value") ?? [];
 
     const newArray = checked
       ? array.filter((element: number) => element !== name)
       : [...array, name];
 
     SessionStorage.setItem("chip-value", newArray);
+
+    const chipsArray = newArray.sort((a: number, b: number) => a - b);
+
+    const chipQuery = chipsArray
+      .map((value: number) => filterQuery[value])
+      .sort()
+      .join("&");
+
+    Router.push({
+      pathname: chipQuery,
+      query: { tab: "course" },
+    });
   };
 
   useEffect(() => {
