@@ -15,7 +15,7 @@ export const SearchBar = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSearch(e.target.value);
-  }
+  };
 
   return (
     <div className="search-bar-wrap">
@@ -34,6 +34,8 @@ export const SearchBar = () => {
       <style jsx>{`
         .search-bar-wrap {
           width: 100%;
+          background-color: #ffffff;
+          margin: 12px 0;
 
           .search-bar-container {
             display: flex;
