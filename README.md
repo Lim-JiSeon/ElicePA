@@ -50,99 +50,102 @@
   - 졸업 프로젝트로 작년 1학기 때 진행했으며, 기본적으로 1~10 까지의 페이지가 있으며, 1일때 왼쪽 화살표를 클릭할 경우 페이지가 이동되지 않도록 설정했습니다.(오른쪽도 마찬가지)
   - react와 js, styled-components를 사용했습니다.
   - [프로젝트 pagination 코드 링크](https://github.com/HUFS-Capstone-23-01/TravelFeelDog-Web/blob/main/src/containers/Community.jsx)
+  - [졸업 프로젝트 피그마 링크](https://www.figma.com/file/idhEkmcHu3orS02gDmHH7G/%EC%BA%A1%EC%8A%A4%ED%86%A4?type=design&node-id=0-1&mode=design&t=VbTMCOipTAhQhmJU-0)
 
-  ```js
-  // pagination 로직 부분
+<img width="404" alt="image" src="https://github.com/Lim-JiSeon/ElicePA/assets/83554018/f75b0936-f37b-48f5-b47d-117f1c47ee63">
 
-  const changePage = (count) => {
-    if (page % 10 == 0) {
-      pageClick[9] = false;
-    } else {
-      pageClick[(page % 10) - 1] = false;
+```js
+// pagination 로직 부분
+
+const changePage = (count) => {
+  if (page % 10 == 0) {
+    pageClick[9] = false;
+  } else {
+    pageClick[(page % 10) - 1] = false;
+  }
+  if (count % 10 == 0) {
+    pageClick[9] = true;
+  } else {
+    pageClick[(count % 10) - 1] = true;
+  }
+  console.log("count = ", count);
+  page[0] = count;
+  setPage([...page]);
+  setPageClick([...pageClick]);
+  console.log("page = ", page);
+  searchTag();
+};
+
+const nextPage = (direction) => {
+  if (direction == "right") {
+    for (let i = 0; i < 10; i++) {
+      pageNumbers[i] += 10;
     }
-    if (count % 10 == 0) {
-      pageClick[9] = true;
+    setPageNumbers([...pageNumbers]);
+  } else {
+    if (pageNumbers[0] - 10 <= 0) {
+      setPageNumbers([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     } else {
-      pageClick[(count % 10) - 1] = true;
-    }
-    console.log("count = ", count);
-    page[0] = count;
-    setPage([...page]);
-    setPageClick([...pageClick]);
-    console.log("page = ", page);
-    searchTag();
-  };
-
-  const nextPage = (direction) => {
-    if (direction == "right") {
       for (let i = 0; i < 10; i++) {
-        pageNumbers[i] += 10;
+        pageNumbers[i] -= 10;
       }
       setPageNumbers([...pageNumbers]);
-    } else {
-      if (pageNumbers[0] - 10 <= 0) {
-        setPageNumbers([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-      } else {
-        for (let i = 0; i < 10; i++) {
-          pageNumbers[i] -= 10;
-        }
-        setPageNumbers([...pageNumbers]);
-      }
     }
-    page[0] = pageNumbers[0];
-    setPage([...page]);
-    searchTag();
-  };
-  ```
+  }
+  page[0] = pageNumbers[0];
+  setPage([...page]);
+  searchTag();
+};
+```
 
-  ```js
-  // pagination css 부분
+```js
+// pagination css 부분
 
-  const Style = {
-  PageList: styled.div`
-   width: 100%;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   padding: 3vh 0;
-  `,
-  PageNum: styled.div`
-   display: flex;
-   flex-direction: row;
-  `,
-  Num: styled.div`
-   padding: 0 1vw;
-  `,
-  NextBtn: styled.button`
-   border: none;
-   background-color: transparent;
-   &:hover{
+const Style = {
+PageList: styled.div`
+ width: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 3vh 0;
+`,
+PageNum: styled.div`
+ display: flex;
+ flex-direction: row;
+`,
+Num: styled.div`
+ padding: 0 1vw;
+`,
+NextBtn: styled.button`
+ border: none;
+ background-color: transparent;
+ &:hover{
+   color: #81E768;
+ }
+ ${({isselected}) =>
+   isselected ?`
      color: #81E768;
-   }
-   ${({isselected}) =>
-     isselected ?`
-       color: #81E768;
-       font-weight: bold;
-     `
-     :`
-       color: #000000;
-     `
-   }
-  `
-  };,
+     font-weight: bold;
+   `
+   :`
+     color: #000000;
+   `
+ }
+`
+};,
 
-  <Style.PageList>
-       <Style.NextBtn onClick={() => nextPage("left")}><FontAwesomeIcon icon={faChevronLeft} color="#94E0AC" size="2x" /></Style.NextBtn>
-         <Style.PageNum>
-           {pageNumbers.map(number => {
-             return (
-               <Style.NextBtn key={number} isselected={number == page? 1: 0} onClick={() => changePage(number)}><Style.Num>{number}</Style.Num></Style.NextBtn>
-             )})
-           }
-         </Style.PageNum>
-         <Style.NextBtn onClick={() => nextPage("right")}><FontAwesomeIcon icon={faChevronRight} color="#94E0AC" size="2x" /></Style.NextBtn>
-       </Style.PageList>
-  ```
+<Style.PageList>
+     <Style.NextBtn onClick={() => nextPage("left")}><FontAwesomeIcon icon={faChevronLeft} color="#94E0AC" size="2x" /></Style.NextBtn>
+       <Style.PageNum>
+         {pageNumbers.map(number => {
+           return (
+             <Style.NextBtn key={number} isselected={number == page? 1: 0} onClick={() => changePage(number)}><Style.Num>{number}</Style.Num></Style.NextBtn>
+           )})
+         }
+       </Style.PageNum>
+       <Style.NextBtn onClick={() => nextPage("right")}><FontAwesomeIcon icon={faChevronRight} color="#94E0AC" size="2x" /></Style.NextBtn>
+     </Style.PageList>
+```
 
 - api 연결
 
