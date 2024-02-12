@@ -1,6 +1,7 @@
 import React from "react";
 import { Chip } from "./Chip";
 
+
 export const ChipTable = () => {
   return (
     <div className="chip-table-container">
