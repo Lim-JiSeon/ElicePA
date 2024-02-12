@@ -1,11 +1,38 @@
-import sampleData from "@/constants/sampleData";
 import Chart from "@/utils/images/chart.png";
 import Calendar from "@/utils/images/calendar.png";
 import Laptop from "@/utils/images/laptop.png";
 import Image from "next/image";
 import React from "react";
 
-export const Card = () => {
+type CardProps = {
+  data: {
+    courseCount: number;
+    courses: {
+      id: number;
+      course_type: number;
+      tags: string[];
+      title: string;
+      short_description: string;
+      logo_file_url: string;
+      image_file_url: string;
+      enrolled_role_period: null;
+      enrolled_role_begin_datetime: null;
+      enrolled_role_end_datetime: null;
+      begin_datetime: number;
+      end_datetime: number;
+      is_discounted: boolean;
+      discounted_price: string;
+      discounted_price_usd: string;
+      discount_rate: null;
+      price: string;
+      price_usd: string;
+      enroll_type: number;
+      is_free: boolean;
+    };
+  };
+};
+
+export const Card = ({ data }: CardProps) => {
   return (
     <a className="card-wrap">
       <div className="card-container">
@@ -14,11 +41,11 @@ export const Card = () => {
             <div className="card-field-text">프로그래밍 기초</div>
           </div>
           <div className="card-title">
-            <div className="card-title-text">{sampleData.courses.title}</div>
+            <div className="card-title-text">{data.courses.title}</div>
           </div>
           <div className="card-detail">
             <div className="card-detail-text">
-              {sampleData.courses.short_description}
+              {data.courses.short_description}
             </div>
           </div>
           <div className="card-contents">
@@ -38,7 +65,7 @@ export const Card = () => {
             </div>
             <div className="card-icon">
               <Image
-                src={sampleData.courses.logo_file_url}
+                src={data.courses.logo_file_url}
                 width={52}
                 height={52}
                 alt=""
@@ -57,8 +84,8 @@ export const Card = () => {
           text-decoration: none;
 
           .card-container {
-            max-height: 338px;
-            max-width: 296px;
+            min-height: 338px;
+            min-width: 296px;
             white-space: normal;
             overflow: hidden;
             border: 1px solid rgba(225, 226, 228, 0.75);
